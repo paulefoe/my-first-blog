@@ -75,17 +75,22 @@ WSGI_APPLICATION = 'girls.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
+# DATABASES = {
+  #  'default': {
+   #     'ENGINE': 'django.db.backends.postgresql',
+    #    'NAME': 'girls',
+     #   'USER': 'svalee',
+     #   'PASSWORD': 'cdfhy79k75',
+      #  'HOST': 'localhost',
+       # 'PORT': '',
+  #  }
+# }
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'girls',
-        'USER': 'svalee',
-        'PASSWORD': 'cdfhy79k75',
-        'HOST': 'localhost',
-        'PORT': '',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators
