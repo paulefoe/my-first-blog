@@ -38,3 +38,9 @@ color: #000000;
 #kek{
     margin-left: 15px;
 }
+
+.comment {
+    margin: 20px 0px 20px 20px;
+    font-family: ' Lobster' , cursive;
+    color: #828282;
+}
