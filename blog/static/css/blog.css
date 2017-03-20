@@ -45,3 +45,11 @@ color: #000000;
     font-family: ' Lobster' , cursive;
     color: #828282;
 }
+
+#sidebar{
+    float:right;
+    width:40%;
+    padding:1px;
+    height:100%;
+
+}

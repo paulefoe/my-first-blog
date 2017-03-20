@@ -13,6 +13,12 @@ class CommentForm(forms.ModelForm):
         model = Comment
         fields = ('author', 'text',)
 
+
+class CommentFormLogged(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ('text',)
+
 class Register(RegistrationForm):
     email = forms.EmailField(required=True)
 

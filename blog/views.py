@@ -1,16 +1,28 @@
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, get_object_or_404, redirect, HttpResponse, Http404
+from django.core.exceptions import ObjectDoesNotExist
 from .models import Post, Comment
 from django.utils import timezone
-from .forms import PostForm, CommentForm
+from .forms import PostForm, CommentForm, CommentFormLogged
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from django.contrib.auth.models import User
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 
 def post_list(request):
     posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('-published_date')
-    return render(request, 'blog/post_list.html', {'posts': posts})
+    paginator = Paginator(posts, 3)  # 3 posts in each page
+    page = request.GET.get('page')
+    try:
+        posts = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer deliver the first page
+        posts = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range deliver last page of results
+        posts = paginator.page(paginator.num_pages)
+    return render(request, 'blog/post_list.html', {'posts': posts, 'page': page})
 
 def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
@@ -83,15 +95,17 @@ def post_logout(request):
     logout(request)
     return redirect('post_list')
 
+
 def add_comment_to_post(request, pk):
     post = get_object_or_404(Post, pk=pk)
     if request.user.is_authenticated():
         name = request.user.username
-        form = CommentForm(initial={'author': name})
+        form = CommentFormLogged()
         if request.method == "POST":
-            form = CommentForm(request.POST)
+            form = CommentFormLogged(request.POST)
             if form.is_valid():
                 comment = form.save(commit=False)
+                comment.author = name
                 comment.post = post
                 comment.approve()
                 comment.save()
@@ -127,6 +141,11 @@ def comment_remove(request, pk):
         return redirect('post_detail', pk=post_pk)
     else:
         return redirect('post_detail', pk=comment.post.pk)
+
+
+
+
+
 
 
 

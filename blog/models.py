@@ -1,6 +1,12 @@
 from django.db import models
-
+from django.db.models import F
 from django.utils import timezone
+from django.contrib.auth.models import User
+from django.urls import reverse
+
+
+def published_posts(self):
+    return self.objects.all()
 
 class Post(models.Model):
     author = models.ForeignKey('auth.User')
@@ -8,6 +14,9 @@ class Post(models.Model):
     text = models.TextField()
     created_date = models.DateTimeField(default=timezone.now)
     published_date = models.DateTimeField(blank=True, null=True)
+
+    def get_absolute_url(self):
+        return reverse('post_detail', args=[str(self.id)])
 
     def publish(self):
         self.published_date = timezone.now()
@@ -18,6 +27,10 @@ class Post(models.Model):
 
     def approved_comments(self):
         return self.comments.filter(approved_comment=True)
+
+
+published = Post.objects.all()
+
 
 class Comment(models.Model):
     post = models.ForeignKey('blog.Post', related_name='comments')
@@ -32,3 +45,5 @@ class Comment(models.Model):
 
     def __str__(self):
         return self.text
+
+

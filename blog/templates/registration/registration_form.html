@@ -13,14 +13,24 @@
     </tr>
          <tr>
         <td>Confirm Password </td>
-        <td>{{ form.password2 }}</td>
+        <td>{{ form.password2 }}
+        {% if form.errors.password2 %}
+            Passwords didn't match <br>
+        {% endif %}
+        </td>
     </tr>
     </tr>
          <tr>
         <td>Email </td>
-        <td>{{ form.email }}</td>
+        <td>{{ form.email }}
+            {% if form.errors.email %}
+            Incorrect email <br>
+        {% endif %}</td>
+
     </tr>
     </table>
+
+
         <input type="submit" value="Register"/>
         <input type="hidden" name="next" value="{{ next }}" />
     </form>
